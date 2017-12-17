@@ -18,10 +18,10 @@ module.exports = function koaStatic({
     const url = pathname.replace('/',path.sep)
     const findPath = `${dir}${url}`
     const stats = cache.get(findPath)
-    const length = stats.size
     let stream,range,start,end,size,type
 
     if (stats) {
+      const length = stats.size
       range = ctx.headers.range
       type = mime.lookup(findPath)
 
