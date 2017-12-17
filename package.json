@@ -1,0 +1,14 @@
+{
+  "name": "ikoa-static",
+  "version": "0.0.1",
+  "main": "index.js",
+  "repository": "https://github.com/ikoajs/static.git",
+  "author": "Jiangtao <321jiangtao@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "ikoa-utils": "^0.0.2",
+    "lru-cache": "^4.1.1",
+    "mime-types": "^2.1.17",
+    "mz": "^2.7.0"
+  }
+}
