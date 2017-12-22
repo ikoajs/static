@@ -61,7 +61,6 @@ module.exports = function koaStatic({
           if (lastCache) {
             if (Date.now() - lastCache.cTime < lastCache.maxAge * 1000) {
               ctx.status = 304
-              return
             }
           } else {
             ctx.etag = generatedEtag
