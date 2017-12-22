@@ -1,6 +1,6 @@
 {
   "name": "ikoa-static",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "main": "index.js",
   "repository": "https://github.com/ikoajs/static.git",
   "author": "Jiangtao <321jiangtao@gmail.com>",
