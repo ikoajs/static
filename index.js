@@ -1,4 +1,4 @@
-const fs = require('mz/fs')
+const fs = require('fs')
 const path = require('path')
 const mime = require('mime-types')
 const { DefinedError } = require('ikoa-utils')
@@ -14,9 +14,11 @@ module.exports = function koaStatic({
 }) {
   const cache = LruCache({maxAge: maxAge * 1000, max: 500})
   const noCacheTypes = ['text/html']
-  return async function(ctx, next) {
-    await read(dir, cache)
 
+  // read once
+  read(dir, cache)
+
+  return async function(ctx, next) {
     const pathname = ctx.URL.pathname
     const url = pathname.replace('/', path.sep)
     const findPath = `${dir}${url}`
@@ -99,13 +101,13 @@ function noop() {}
 
 // 返回所有的文件，不包含. 软链接
 async function read(file, cache) {
-  const stats = await fs.stat(file)
+  const stats = fs.statSync(file)
 
   if (stats.isDirectory()) {
-    const files = await fs.readdir(file)
-    await Promise.all(files.map(k => read(path.join(file, k), cache)))
+    const files = fs.readdirSync(file)
+    files.map(k => read(path.join(file, k), cache))
   } else if (stats.isFile() && !path.basename(file).startsWith('.')) {
-    cache.set(file, stats)
+    if (!cache.get(file)) cache.set(file, stats)
   }
   return cache
 }
