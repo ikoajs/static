@@ -21,7 +21,8 @@ module.exports = function koaStatic({
   return async function(ctx, next) {
     const pathname = ctx.URL.pathname
     const url = pathname.replace('/', path.sep)
-    const findPath = `${dir}${url}`
+    const findPath = `${dir}${decodeURIComponent(url)}`
+
     const stats = cache.get(findPath)
     let stream, range, start, end, type
 
@@ -81,7 +82,7 @@ module.exports = function koaStatic({
     } else {
       ctx.onerror(new DefinedError({
         name: 'ikoa-static',
-        message: `${pathname} not found`,
+        message: `${decodeURIComponent(pathname)} not found`,
         status: 404
       }))
     }
@@ -100,11 +101,13 @@ function noop() {}
 
 // 返回所有的文件，不包含. 软链接
 async function read(file, cache) {
+
   const stats = fs.statSync(file)
 
   if (stats.isDirectory()) {
     const files = fs.readdirSync(file)
     files.map(k => read(path.join(file, k), cache))
+  // 排除掉文件中的 dotfile
   } else if (stats.isFile() && !path.basename(file).startsWith('.')) {
     if (!cache.get(file)) cache.set(file, stats)
   }
